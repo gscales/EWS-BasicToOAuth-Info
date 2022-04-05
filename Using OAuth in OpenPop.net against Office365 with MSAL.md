@@ -10,16 +10,16 @@ If you are going to update the authentication in your application what you use t
 
 # What you need to change in OpenPop.net   #
 
-Because OpenPop.net doesn't currently support oAuth but is open source you can easly modify the source code to suit you needs. Generally doing this isn't a good idea as your can loose track of upstream updates but given the age of POP3 and the number of updates to this library it shouldn't really be that much of an issue. As an example I created a fork of OpenPop.net [https://github.com/gscales/hpop](https://github.com/gscales/hpop) and added oAuth support to this.
+Because OpenPop.net doesn't currently support oAuth but is open source you can easly modify the source code to suit your needs. Generally doing this isn't a good idea as your can loose track of upstream updates but given the age of POP3 and the number of updates to this library it shouldn't really be that much of an issue(and the main library will probably be updated eventually). As an example I created a fork of OpenPop.net [https://github.com/gscales/hpop](https://github.com/gscales/hpop) and added oAuth support to this.
 
-the two changes I made to this library where to add a new Authetication Method for XOAUTH2 in the Pop3client authenticaiton method
+the two changes I made to this library where to add a new Authetication Method for XOAUTH2 in the Pop3client class's authenticaiton method
 
     	public void Authenticate(string username, string password, AuthenticationMethod authenticationMethod)
 		......
 		case AuthenticationMethod.XOAUTH2:
 			AuthenticateUsingXOAUTH2(password);
 			break;
-And a method that sends the Authentication
+And a method that sends the Authentication using the existing SendCommand method
 
     	private void AuthenticateUsingXOAUTH2(string saslXoAuthToken)
 		{
@@ -28,10 +28,11 @@ And a method that sends the Authentication
 			// Authentication was successful if no exceptions thrown before getting here
 		}
 
+Because POP3 itself is a pretty simple protocol that's all the modification that is required
 
 # Putting in all together #
 
-An example of using MSAL to get an access token for POP3 Authentication and then format that as a sasl token and use that in my OpenPop fork looks like
+An example of using MSAL and the ROPC flow to get an access token for POP3 Authentication and then format that as a sasl token and use that in my OpenPop fork looks like. The ROPC flow is generally frowned apon from a security point of view but I've used it in this example as its the closet thing to what you would have in you existing code where credentials are in use. It may also be the only option in the short term for non interactive applications.
 
 
 
@@ -47,4 +48,6 @@ An example of using MSAL to get an access token for POP3 Authentication and then
         int messageCount = client.GetMessageCount();
         var lastMessage = client.GetMessage(messageCount);            
       
+# Some last things to remember about oAuth #
 
+Access tokens are only valid for 1 hours so before you call authenticate you may need to check you have a valid Access Token if you looking to reuse a token or store them for any length of time.
