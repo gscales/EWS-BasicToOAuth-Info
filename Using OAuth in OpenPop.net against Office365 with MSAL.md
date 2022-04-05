@@ -1,4 +1,4 @@
-## Using OAuth in OpenPop.net to connect via POP3 to Exchange Online/Office365 with MSAL ##
+## Using OAuth in OpenPop to connect via POP3 to Exchange Online/Office365 with MSAL ##
 
 If you are still using POP3 in any application to access email on Office365 then you want to pay imediate attention to the fact that Basic Authentication is going to be switched off for good (regardless of whether your using it or not) in October see [https://techcommunity.microsoft.com/t5/exchange-team-blog/basic-authentication-and-exchange-online-september-2021-update/ba-p/2772210](https://techcommunity.microsoft.com/t5/exchange-team-blog/basic-authentication-and-exchange-online-september-2021-update/ba-p/2772210) (Any they really really mean it this time)
 
