@@ -8,6 +8,10 @@ So what should you do ? If you are using POP3 you should probably stop (it was g
 
 If you are going to update the authentication in your application what you use to do the OAuth Authentication/Token acquisition part is probably the hardest decision/change you have to make. Eg your authentication code can be as simple as a few HttpClient requests up to a fully robust authentication libary like [MSAL](https://docs.microsoft.com/en-us/azure/active-directory/develop/msal-overview) which is the one I would recommend as its going to work in most identity topologies (which can get complicated around different federation providers etc). MSAL is what I'll be using in the examples in this doc.
 
+# Setup you Azure Application Registration #
+
+Before you can use Modern Authentication you need to have an Azure Application registration that is consented to and provides the https://outlook.office.com/POP.AccessAsUser.All permission. Details on how to do this can be found in https://docs.microsoft.com/en-us/exchange/client-developer/legacy-protocols/how-to-authenticate-an-imap-pop-smtp-application-by-using-oauth 
+
 # What you need to change in OpenPop.net   #
 
 Because OpenPop.net doesn't currently support oAuth but is open source you can easly modify the source code to suit your needs. Generally doing this isn't a good idea as your can loose track of upstream updates but given the age of POP3 and the number of updates to this library it shouldn't really be that much of an issue(and the main library will probably be updated eventually). As an example I created a fork of OpenPop.net [https://github.com/gscales/hpop](https://github.com/gscales/hpop) and added oAuth support to this.
@@ -32,7 +36,7 @@ Because POP3 itself is a pretty simple protocol that's all the modification that
 
 # Putting in all together #
 
-An example of using MSAL and the ROPC flow to get an access token for POP3 Authentication and then format that as a sasl token and use that in my OpenPop fork looks like. The ROPC flow is generally frowned apon from a security point of view but I've used it in this example as its the closet thing to what you would have in you existing code where credentials are in use. It may also be the only option in the short term for non interactive applications.
+An example of using MSAL and the ROPC flow to get an access token for POP3 Authentication and then format that as a sasl token and use that in my OpenPop fork looks like. The ROPC flow is generally frowned apon from a security point of view but I've used it in this example as its the closet thing to what you would may have in your existing code where explict credentials are in use. It may also be the only option in the short term for non interactive applications.
 
 
 
@@ -50,4 +54,4 @@ An example of using MSAL and the ROPC flow to get an access token for POP3 Authe
       
 # Some last things to remember about oAuth #
 
-Access tokens are only valid for 1 hours so before you call authenticate you may need to check you have a valid Access Token if you looking to reuse a token or store them for any length of time.
+Access tokens are only valid for 1 hour so before you call authenticate you may need to check you have a valid Access Token if you are looking to reuse a token or store them for any length of time.
