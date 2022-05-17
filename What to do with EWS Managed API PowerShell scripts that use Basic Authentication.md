@@ -1,4 +1,4 @@
-#What to do with EWS Managed API PowerShell scripts that use Basic Authentication#
+# What to do with EWS Managed API PowerShell scripts that use Basic Authentication #
 
 The EWS Managed API has been a good client-side library that has been around for a very long time and consumed in a lot of different PowerShell scripts over the years (in a number of differing ways). For the most part most of these implementations will be using Basic authentication (or NTLM/Kerberos if it's being used against onPrem). With the big switch off for basic Authentication coming in October there is a good chance that these old (or even something newly written) that has been running in the background somewhere and has become either forgotten or just neglected will stop working.
 
