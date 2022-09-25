@@ -98,6 +98,30 @@ If you want to upgrade your script to use Modern Auth here's a bunch of differen
 
 [https://gsexdev.blogspot.com/2019/10/using-msal-microsoft-authentication.html](https://gsexdev.blogspot.com/2019/10/using-msal-microsoft-authentication.html)
 
+Some example code in PowerShell if you were using an Endpoint in Azure (Based upon the three earlier blog posts) would look like this
+
+     $TLS12Protocol = [System.Net.SecurityProtocolType] 'Ssl3 , Tls12'
+     [System.Net.ServicePointManager]::SecurityProtocol = $TLS12Protocol
+
+     #Provide your Office 365 Tenant Domain Name or Tenant Id
+     $TenantId = "somedomain.onmicrosoft.com"
+
+     #Provide Application (client) Id of your app
+     $AppClientId="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+
+     #Provide Application client secret key
+     $ClientSecret ="MySecretFromBackEndWebApp"
+
+     $ID=[Microsoft.Exchange.WebServices.Data.ImpersonatedUserId]::new()
+     $id.Id='user@contoso.com'
+     $service.ImpersonatedUserId=$ID
+
+     $RequestBody = @{client_id=$AppClientId;client_secret=$ClientSecret;grant_type="client_credentials";scope=”https://outlook.office365.com/.default”;}
+     $OAuthResponse = Invoke-RestMethod -Method Post -Uri “https://login.microsoftonline.com/$TenantId/oauth2/v2.0/token” -Body $RequestBody
+     $AccessToken = $OAuthResponse.access_token
+     
+This would replace your PowerShell code for Basic Authentication to Modern Authentication
+
 ## Scripts that run past 1 hour ##
 
 If you have a script that is running for a long time eg it might be processing every mailbox in a very large tenant you do need to be careful that AccessToken's do expire. So if you modify your script using any of the above links it may appear to work fine in testing but fail at a random point after 1 hour. So consider modifying your script to track the token expiration and refresh. 
