@@ -122,6 +122,33 @@ Some example code in PowerShell if you were using an Endpoint in Azure (Based up
      
 This would replace your PowerShell code for Basic Authentication to Modern Authentication
 
+## MSAL.PS example of using the client credentails flow
+
+An example of using the client credentails flow with EWS and MSAL.PS https://github.com/AzureAD/MSAL.PS
+
+    $ClientId = "d66f79ab-9457-46ba-b544-abda1ef1e3f4"
+    $TenantId = "13af9f3c-b494-4795-bb19-f8364545cd00"
+
+    $certThumbprint = "1ce0661f3d160f7ac4790e8c8d77deb863d01115"
+    $ClientCertificate = Get-ChildItem -Path cert:\currentUser\My\$certThumbprint
+    $tokenResponse = Get-MsalToken -clientID $ClientId -ClientCertificate $ClientCertificate -Authority "https://login.microsoftonline.com/$TenantId/oauth2/v2.0/token" -scope      "https://outlook.office365.com/.default"
+    $AccessToken = $tokenResponse.AccessToken
+    
+## Debuggng your token code if you get a 401 response when using it in EWS
+
+If you get 401 error when trying to use the Access token you generated this could mean a number of different things, a first debug step is to decode the AccessToken you are getting back and check that the Audience is correct and the correct roles are being returned. You can use a site like https://jwt.io to inspect you token for example a cilent_crendentials flow token should look like the following
+
+![image](https://user-images.githubusercontent.com/11398797/192177479-35c18614-a06c-418f-9071-e77dc8b556d8.png)
+
+For Delegate permissions your token shoud look like
+
+![image](https://user-images.githubusercontent.com/11398797/192178876-e14b74bd-136b-4922-81c3-8cea8a8a3911.png)
+
+If your token doesn't contain the correct role (client credentials) or correct scp (delegate) common issues can include
+   EWS Permssions not added
+   Incorrect Permsssion added (eg Delegate Permissions being used instead of Applicaiton Permissions)
+   Permissions not consented to https://learn.microsoft.com/en-us/azure/active-directory/manage-apps/consent-and-permissions-overview
+
 ## Scripts that run past 1 hour ##
 
 If you have a script that is running for a long time eg it might be processing every mailbox in a very large tenant you do need to be careful that AccessToken's do expire. So if you modify your script using any of the above links it may appear to work fine in testing but fail at a random point after 1 hour. So consider modifying your script to track the token expiration and refresh. 
