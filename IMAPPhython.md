@@ -1,12 +1,12 @@
-# Phython Office365 / Exchange Online IMAP sample using MSAL Imaplib and client credentials flow sample #
+# Phython Office365 / Exchange Online IMAP sample using MSAL Imaplib and client credentials flow #
 
-While its not recommneded to use IMAP4 anymore for connecting to Exchange i was stuggling to find a complete end-end sample for connecting using the client credentials flow, msal and the Imaplib so put together the following from a number of different sources. 
+While its not recommneded to use IMAP4 anymore for connecting to Exchange i was struggling to find a complete end-end sample for connecting using the client credentials flow, msal and the Imaplib so I put together the following example and doco from a number of different sources. 
 
 # Pre-Requisites #
 
 This section is important and is different from EWS and Graph and where a lot of people get stuck. 
 
-**Step 1** is create your applicaiton registration and consent to that registration as per [https://learn.microsoft.com/en-us/exchange/client-developer/legacy-protocols/how-to-authenticate-an-imap-pop-smtp-application-by-using-oauth#use-client-credentials-grant-flow-to-authenticate-imap-and-pop-connections](https://learn.microsoft.com/en-us/exchange/client-developer/legacy-protocols/how-to-authenticate-an-imap-pop-smtp-application-by-using-oauth#use-client-credentials-grant-flow-to-authenticate-imap-and-pop-connections). If you have problems finding the correct permission you can just modify the manifest directly and then consent to the permission in the GUI. The manifest permission for IMAP for the client credentials flow should be
+**Step 1** is create your applicaiton registration and consent to that registration as per [https://learn.microsoft.com/en-us/exchange/client-developer/legacy-protocols/how-to-authenticate-an-imap-pop-smtp-application-by-using-oauth#use-client-credentials-grant-flow-to-authenticate-imap-and-pop-connections](https://learn.microsoft.com/en-us/exchange/client-developer/legacy-protocols/how-to-authenticate-an-imap-pop-smtp-application-by-using-oauth#use-client-credentials-grant-flow-to-authenticate-imap-and-pop-connections). If you have problems finding the correct permission you can just modify the manifest directly and then consent to the permission in the Portal. The manifest permission for IMAP for the client credentials flow should be
 
 	"requiredResourceAccess": [
 		{
